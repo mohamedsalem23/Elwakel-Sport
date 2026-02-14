@@ -1,20 +1,30 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.engine.url import make_url
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
+_URL_CANDIDATES = [
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "POSTGRES_PRISMA_URL",
+    "POSTGRES_URL_NON_POOLING",
+    "NEON_DATABASE_URL",
+]
+
 # Prefer a production Postgres URL if present (Neon/Vercel integrations can use different names).
 # If not present, fallback to local sqlite database.
-DATABASE_URL = (
-    os.getenv("DATABASE_URL")
-    or os.getenv("POSTGRES_URL")
-    or os.getenv("POSTGRES_PRISMA_URL")
-    or os.getenv("POSTGRES_URL_NON_POOLING")
-    or os.getenv("NEON_DATABASE_URL")
-)
+DATABASE_URL = None
+DATABASE_URL_SOURCE = None
+for k in _URL_CANDIDATES:
+    v = os.getenv(k)
+    if v:
+        DATABASE_URL = v
+        DATABASE_URL_SOURCE = k
+        break
 
 if DATABASE_URL:
     # Handle "postgres://" vs "postgresql://" standard for SQLAlchemy
@@ -22,7 +32,11 @@ if DATABASE_URL:
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     
     # PostgreSQL connection (Production)
-    print("DEBUG: Using PostgreSQL Connection")
+    try:
+        safe_url = make_url(DATABASE_URL).render_as_string(hide_password=True)
+    except Exception:
+        safe_url = "<unparseable DATABASE_URL>"
+    print(f"DEBUG: Using PostgreSQL Connection ({DATABASE_URL_SOURCE}): {safe_url}")
     engine = create_engine(DATABASE_URL)
 else:
     # SQLite connection (Local Development)

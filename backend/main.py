@@ -15,6 +15,22 @@ except ModuleNotFoundError:
 
 from contextlib import asynccontextmanager
 
+def init_app():
+    """Initialize DB schema and seed required data.
+
+    Some serverless runtimes can be finicky about lifespan hooks; we call this from both
+    the lifespan context manager and a startup event to ensure it runs.
+    """
+    try:
+        print("DEBUG: Initializing application...")
+        models.Base.metadata.create_all(bind=database.engine)
+        print("DEBUG: Tables created/verified.")
+        migrate_site_settings()
+        create_default_admin()
+        print("DEBUG: Initialization completed.")
+    except Exception as e:
+        print(f"Startup Error: {e}")
+
 def migrate_site_settings():
     try:
         with database.engine.connect() as conn:
@@ -55,15 +71,8 @@ def create_default_admin():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    try:
-        print("DEBUG: Starting application lifespan...")
-        models.Base.metadata.create_all(bind=database.engine)
-        print("DEBUG: Tables created/verified.")
-        migrate_site_settings()
-        create_default_admin()
-        print("DEBUG: Admin creation step completed.")
-    except Exception as e:
-        print(f"Startup Error: {e}")
+    print("DEBUG: Starting application lifespan...")
+    init_app()
     yield
     # Shutdown
     pass
@@ -71,6 +80,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="ELWAKEL-SPORT Booking System", lifespan=lifespan)
 
 import os
+
+@app.on_event("startup")
+def on_startup():
+    # Extra safety for runtimes that don't reliably run lifespan.
+    init_app()
 
 # CORS Configuration
 ALLOWED_ORIGINS = [
