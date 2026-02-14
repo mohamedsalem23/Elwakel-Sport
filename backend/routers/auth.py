@@ -101,6 +101,12 @@ async def reset_password(request: schemas.ResetPasswordRequest, db: Session = De
 @router.get("/google/login")
 async def google_login(request: Request):
     redirect_uri = request.url_for('google_callback')
+    
+    # Force HTTPS if strictly required (common fix for Vercel/proxies)
+    if "vercel.app" in str(redirect_uri) and str(redirect_uri).startswith("http://"):
+        redirect_uri = str(redirect_uri).replace("http://", "https://")
+    
+    print(f"DEBUG: Google Login Redirect URI: {redirect_uri}")
     return await auth.oauth.google.authorize_redirect(request, redirect_uri)
 
 @router.get("/google/callback")

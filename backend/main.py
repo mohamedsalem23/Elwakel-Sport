@@ -46,9 +46,12 @@ def create_default_admin():
 async def lifespan(app: FastAPI):
     # Startup
     try:
+        print("DEBUG: Starting application lifespan...")
         models.Base.metadata.create_all(bind=database.engine)
+        print("DEBUG: Tables created/verified.")
         migrate_site_settings()
         create_default_admin()
+        print("DEBUG: Admin creation step completed.")
     except Exception as e:
         print(f"Startup Error: {e}")
     yield

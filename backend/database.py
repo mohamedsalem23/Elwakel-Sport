@@ -16,9 +16,11 @@ if DATABASE_URL:
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     
     # PostgreSQL connection (Production)
+    print("DEBUG: Using PostgreSQL Connection")
     engine = create_engine(DATABASE_URL)
 else:
     # SQLite connection (Local Development)
+    print("DEBUG: Using SQLite Connection (Fallback)")
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(BASE_DIR, "elwakel.db")
     SQLALCHEMY_DATABASE_URL = f"sqlite:///{db_path}"
