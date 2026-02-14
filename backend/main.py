@@ -3,8 +3,8 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy import text
-from backend import models, database, crud
-from backend.routers import auth, bookings, admin, events, tournaments
+from . import models, database, crud
+from .routers import auth, bookings, admin, events, tournaments
 
 from contextlib import asynccontextmanager
 
