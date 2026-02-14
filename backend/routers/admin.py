@@ -1,7 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend import crud, models, schemas, auth, database
+try:
+    from backend import crud, models, schemas, auth, database  # type: ignore
+except ModuleNotFoundError:
+    import crud, models, schemas, auth, database  # type: ignore
 
 router = APIRouter(
     prefix="/admin",

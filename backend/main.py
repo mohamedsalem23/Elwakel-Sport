@@ -3,8 +3,15 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy import text
-from backend import models, database, crud
-from backend.routers import auth, bookings, admin, events, tournaments
+
+# Vercel often deploys `backend/` as the project root (so imports are local like `import models`).
+# Local dev can also run as a package (so imports are `from backend import ...`).
+try:
+    from backend import models, database, crud  # type: ignore
+    from backend.routers import auth, bookings, admin, events, tournaments  # type: ignore
+except ModuleNotFoundError:
+    import models, database, crud  # type: ignore
+    from routers import auth, bookings, admin, events, tournaments  # type: ignore
 
 from contextlib import asynccontextmanager
 
@@ -26,7 +33,10 @@ def create_default_admin():
             admin_user = crud.get_user_by_username(db, username="admin")
             if not admin_user:
                 admin_data = {"username": "admin", "email": "admin@elwakel-sport.com", "password": "Admin@123", "phone_number": None}
-                from schemas import UserCreate
+                try:
+                    from backend.schemas import UserCreate  # type: ignore
+                except ModuleNotFoundError:
+                    from schemas import UserCreate  # type: ignore
                 admin_obj = UserCreate(**admin_data)
                 admin_user = crud.create_user(db, admin_obj)
                 admin_user.is_admin = True
