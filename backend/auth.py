@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from backend import schemas, crud, models, database
+from . import schemas, crud, models, database
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")

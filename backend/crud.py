@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from backend import models, schemas, auth
+from . import models, schemas, auth
 from datetime import datetime
 from typing import Dict, List
 
