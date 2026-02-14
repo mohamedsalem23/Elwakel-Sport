@@ -6,44 +6,56 @@ from sqlalchemy import text
 from backend import models, database, crud
 from backend.routers import auth, bookings, admin, events, tournaments
 
-# Create tables
-models.Base.metadata.create_all(bind=database.engine)
+from contextlib import asynccontextmanager
 
 def migrate_site_settings():
-    with database.engine.connect() as conn:
-        cols = conn.execute(text("PRAGMA table_info(site_settings)")).fetchall()
-        col_names = {row[1] for row in cols}
-        if "show_tournaments_page" not in col_names:
-            conn.execute(text("ALTER TABLE site_settings ADD COLUMN show_tournaments_page BOOLEAN DEFAULT 0 NOT NULL"))
-            conn.commit()
-
-migrate_site_settings()
-
-# Create default admin user
-def create_default_admin():
-    db = database.SessionLocal()
     try:
-        admin_user = crud.get_user_by_username(db, username="admin")
-        if not admin_user:
-            admin_data = {"username": "admin", "email": "admin@elwakel-sport.com", "password": "Admin@123", "phone_number": None}
-            from backend.schemas import UserCreate
-            admin_obj = UserCreate(**admin_data)
-            admin_user = crud.create_user(db, admin_obj)
-            admin_user.is_admin = True
-            db.commit()
-            print("✅ Default Admin User Created: username='admin', password='Admin@123'")
-        else:
-            # Always ensure admin has correct privileges and reset password on startup
-            admin_user.hashed_password = crud.get_password_hash("Admin@123")
-            admin_user.is_admin = True
-            db.commit()
-            print("✅ Default Admin User Verified/Updated: username='admin', password='Admin@123'")
-    finally:
-        db.close()
+        with database.engine.connect() as conn:
+            cols = conn.execute(text("PRAGMA table_info(site_settings)")).fetchall()
+            col_names = {row[1] for row in cols}
+            if "show_tournaments_page" not in col_names:
+                conn.execute(text("ALTER TABLE site_settings ADD COLUMN show_tournaments_page BOOLEAN DEFAULT 0 NOT NULL"))
+                conn.commit()
+    except Exception as e:
+        print(f"Migration Warning: {e}")
 
-create_default_admin()
+def create_default_admin():
+    try:
+        db = database.SessionLocal()
+        try:
+            admin_user = crud.get_user_by_username(db, username="admin")
+            if not admin_user:
+                admin_data = {"username": "admin", "email": "admin@elwakel-sport.com", "password": "Admin@123", "phone_number": None}
+                from backend.schemas import UserCreate
+                admin_obj = UserCreate(**admin_data)
+                admin_user = crud.create_user(db, admin_obj)
+                admin_user.is_admin = True
+                db.commit()
+                print("✅ Default Admin User Created")
+            else:
+                admin_user.hashed_password = crud.get_password_hash("Admin@123")
+                admin_user.is_admin = True
+                db.commit()
+                print("✅ Admin User Verified")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"Admin Creation Warning: {e}")
 
-app = FastAPI(title="ELWAKEL-SPORT Booking System")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    try:
+        models.Base.metadata.create_all(bind=database.engine)
+        migrate_site_settings()
+        create_default_admin()
+    except Exception as e:
+        print(f"Startup Error: {e}")
+    yield
+    # Shutdown
+    pass
+
+app = FastAPI(title="ELWAKEL-SPORT Booking System", lifespan=lifespan)
 
 import os
 
