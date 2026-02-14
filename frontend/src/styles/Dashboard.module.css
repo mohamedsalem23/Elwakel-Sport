@@ -1,0 +1,424 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #10b981;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+}
+
+.userInfo {
+  text-align: right;
+}
+
+.userInfo p {
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+}
+
+.userInfo strong {
+  color: #e2e8f0;
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid #10b981;
+  color: #a7f3d0;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.tab:hover {
+  color: #10b981;
+}
+
+.tab.active {
+  color: #10b981;
+  border-bottom-color: #10b981;
+}
+
+.tabContent {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bookingsList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.emptyState p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1);
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #a3e635;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  color: #94a3b8;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Filter Container */
+.filterContainer {
+  margin-bottom: 2rem;
+}
+
+.filterContainer h2 {
+  color: #10b981;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid #334155;
+  background: transparent;
+  color: #cbd5e1;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.filterBtn.active {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+/* Loading Spinner */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .userInfo {
+    text-align: center;
+    width: 100%;
+  }
+
+  .tabs {
+    gap: 0;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 0 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    padding: 1rem;
+    flex: 1;
+    min-width: 120px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filterButtons {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .filterBtn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+/* Users Table */
+.usersTableWrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.usersTable th {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.usersTable td {
+  padding: 1rem;
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.95rem;
+}
+
+.usersTable tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.usersTable tr:last-child td {
+  border-bottom: none;
+}
+
+.deleteUserBtn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.deleteUserBtn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Bar Chart */
+.chartSection {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.barChart {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.barItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.barLabel {
+  color: #94a3b8;
+  font-weight: 600;
+  min-width: 140px;
+  font-size: 0.95rem;
+}
+
+.barTrack {
+  flex: 1;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 14px;
+  transition: width 1s ease;
+  min-width: 4px;
+}
+
+.barValue {
+  color: #e2e8f0;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: right;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .usersTableWrapper {
+    margin: 0 -15px;
+    border-radius: 0;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .barLabel {
+    min-width: 90px;
+    font-size: 0.8rem;
+  }
+
+  .barValue {
+    font-size: 0.9rem;
+  }
+
+  .chartSection {
+    padding: 1.5rem 1rem;
+  }
+}

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+passlib[argon2]
+python-jose[cryptography]
+python-multipart
+python-dotenv
+authlib
+httpx
+fastapi-mail
+itsdangerous
+psycopg2-binary

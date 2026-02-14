@@ -1,0 +1,85 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #064e3b;
+}
+
+.pitch {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #10b981 0%, #064e3b 100%);
+}
+
+.stripes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(90deg, 
+    transparent, 
+    transparent 10%, 
+    rgba(255, 255, 255, 0.03) 10%, 
+    rgba(255, 255, 255, 0.03) 20%
+  );
+  animation: moveStripes 20s linear infinite;
+}
+
+@keyframes moveStripes {
+  from { background-position: 0 0; }
+  to { background-position: 200% 0; }
+}
+
+.glows {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.glow1, .glow2 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+}
+
+.glow1 {
+  background: #fbbf24;
+  top: -100px;
+  right: -100px;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.glow2 {
+  background: #3b82f6;
+  bottom: -100px;
+  left: -100px;
+  animation: pulse 12s ease-in-out infinite reverse;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.2); opacity: 0.2; }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: drift 10s linear infinite;
+}
+
+@keyframes drift {
+  from { transform: translateY(0) translateX(0); }
+  to { transform: translateY(-100vh) translateX(50px); }
+}
