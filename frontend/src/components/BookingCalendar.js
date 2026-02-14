@@ -14,7 +14,8 @@ export default function BookingCalendar({ onBook, loading = false, existingBooki
     const timeSlots = [
         '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
         '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-        '18:00', '19:00', '20:00', '21:00', '22:00',
+        '18:00', '19:00', '20:00', '21:00', '22:00', '23:00',
+        '24:00',
     ];
 
     const durations = [
@@ -22,6 +23,7 @@ export default function BookingCalendar({ onBook, loading = false, existingBooki
         { value: '60', label: `1 ${t('hour')}` },
         { value: '90', label: `1.5 ${t('hours')}` },
         { value: '120', label: `2 ${t('hours')}` },
+        { value: '180', label: `3 ${t('hours')}` },
     ];
 
     const isToday = (dateStr) => {
