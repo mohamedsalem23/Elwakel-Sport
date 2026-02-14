@@ -72,6 +72,10 @@ if frontend_url:
     if frontend_url.endswith("/"):
         ALLOWED_ORIGINS.append(frontend_url[:-1])
 
+# Trust Vercel/Proxy Headers for HTTPS
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
