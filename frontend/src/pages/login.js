@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { login, fetchUser } from '@/api';
+import { login, fetchUser, API_BASE_URL } from '@/api';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import DynamicBackground from '@/components/DynamicBackground';
@@ -43,10 +43,7 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    const apiBase = typeof window !== 'undefined'
-      ? `http://${window.location.hostname}:8000`
-      : 'http://localhost:8000';
-    window.location.href = `${apiBase}/google/login`;
+    window.location.href = `${API_BASE_URL}/google/login`;
   };
 
   const handleSubmit = async (e) => {

@@ -1,10 +1,22 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined'
+const normalizeBaseUrl = (value) => {
+    if (!value) return value;
+    return value.endsWith('/') ? value.slice(0, -1) : value;
+};
+
+export const API_BASE_URL = normalizeBaseUrl(
+    process.env.NEXT_PUBLIC_API_URL ||
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    process.env.NEXT_PUBLIC_API_BASE ||
+    (typeof window !== 'undefined'
         ? `http://${window.location.hostname}:8000`
-        : 'http://localhost:8000'),
+        : 'http://localhost:8000')
+);
+
+const API = axios.create({
+    baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json'
     }

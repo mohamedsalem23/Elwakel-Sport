@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { signup, completeGoogleProfile, fetchUser } from '@/api';
+import { signup, completeGoogleProfile, fetchUser, API_BASE_URL } from '@/api';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import DynamicBackground from '@/components/DynamicBackground';
@@ -45,10 +45,7 @@ export default function Signup() {
   }, [router.query.google_setup, router.query.token, router, t]);
 
   const handleGoogleSignup = () => {
-    const apiBase = typeof window !== 'undefined'
-      ? `http://${window.location.hostname}:8000`
-      : 'http://localhost:8000';
-    window.location.href = `${apiBase}/google/login`;
+    window.location.href = `${API_BASE_URL}/google/login`;
   };
 
   const handleSubmit = async (e) => {

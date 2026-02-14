@@ -3,8 +3,8 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy import text
-import models, database, crud
-from routers import auth, bookings, admin, events, tournaments
+from backend import models, database, crud
+from backend.routers import auth, bookings, admin, events, tournaments
 
 from contextlib import asynccontextmanager
 
@@ -82,6 +82,7 @@ app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -89,7 +90,14 @@ app.add_middleware(
 )
 
 # Session Middleware for OAuth
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "some-very-secret-key-for-oauth"))
+cookie_secure = os.getenv("COOKIE_SECURE")
+https_only = (os.getenv("VERCEL") is not None) if cookie_secure is None else (cookie_secure == "1")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.getenv("SECRET_KEY", "some-very-secret-key-for-oauth"),
+    https_only=https_only,
+    same_site="lax",
+)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
