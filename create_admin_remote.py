@@ -8,7 +8,13 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv('backend/.env')
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = (
+    os.getenv("DATABASE_URL")
+    or os.getenv("POSTGRES_URL")
+    or os.getenv("POSTGRES_PRISMA_URL")
+    or os.getenv("POSTGRES_URL_NON_POOLING")
+    or os.getenv("NEON_DATABASE_URL")
+)
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 

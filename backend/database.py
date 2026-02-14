@@ -6,9 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Check for DATABASE_URL environment variable first (Production/Vercel)
-# If not present, fallback to local sqlite database
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Prefer a production Postgres URL if present (Neon/Vercel integrations can use different names).
+# If not present, fallback to local sqlite database.
+DATABASE_URL = (
+    os.getenv("DATABASE_URL")
+    or os.getenv("POSTGRES_URL")
+    or os.getenv("POSTGRES_PRISMA_URL")
+    or os.getenv("POSTGRES_URL_NON_POOLING")
+    or os.getenv("NEON_DATABASE_URL")
+)
 
 if DATABASE_URL:
     # Handle "postgres://" vs "postgresql://" standard for SQLAlchemy

@@ -84,8 +84,9 @@ conf = ConnectionConfig(
 )
 
 async def send_reset_password_email(email: str, token: str):
-    # In a real scenario, this would be a link to your frontend reset page
-    reset_link = f"http://localhost:3000/reset-password?token={token}"
+    # Build reset link from FRONTEND_URL (production/Vercel) with a safe localhost fallback.
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000").rstrip("/")
+    reset_link = f"{frontend_url}/reset-password?token={token}"
     
     html = f"""
     <p>لقد طلبت إعادة تعيين كلمة المرور الخاصة بك في Elwakel-Sport.</p>
