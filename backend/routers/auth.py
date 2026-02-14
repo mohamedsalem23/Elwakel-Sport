@@ -138,12 +138,15 @@ async def google_callback(request: Request, db: Session = Depends(database.get_d
     # Redirect to frontend with token (or handle as preferred)
     # For simplicity, returning the token, but usually you redirect to a frontend callback page
     from fastapi.responses import RedirectResponse
-    frontend_url = "http://localhost:3000/login" # Default redirect
-    if "192.168.100.77" in str(request.base_url):
-         frontend_url = "http://192.168.100.77:3000/login"
+    import os
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    if frontend_url.endswith("/"):
+        frontend_url = frontend_url[:-1]
+    
+    login_url = f"{frontend_url}/login"
 
     if not user.phone_number:
-        frontend_url = frontend_url.replace("/login", "/signup")
-        return RedirectResponse(url=f"{frontend_url}?token={access_token}&google_setup=1")
+        signup_url = login_url.replace("/login", "/signup")
+        return RedirectResponse(url=f"{signup_url}?token={access_token}&google_setup=1")
 
-    return RedirectResponse(url=f"{frontend_url}?token={access_token}")
+    return RedirectResponse(url=f"{login_url}?token={access_token}")
