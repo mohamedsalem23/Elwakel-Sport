@@ -14,6 +14,7 @@ except ModuleNotFoundError:
     from routers import auth, bookings, admin, events, tournaments  # type: ignore
 
 from contextlib import asynccontextmanager
+import re
 
 def init_app():
     """Initialize DB schema and seed required data.
@@ -61,6 +62,14 @@ def create_default_admin():
             else:
                 admin_user.hashed_password = crud.get_password_hash("Admin@123")
                 admin_user.is_admin = True
+
+                # Prevent response-model validation errors if an old seed/script wrote an invalid phone.
+                # Phone is optional; `None` is valid and avoids 500s on `/users/me`.
+                if admin_user.phone_number:
+                    p = admin_user.phone_number.replace(" ", "").replace("-", "")
+                    if not re.match(r"^(010|011|012|015)\\d{8}$", p):
+                        admin_user.phone_number = None
+
                 db.commit()
                 print("✅ Admin User Verified")
         finally:

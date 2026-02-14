@@ -38,7 +38,8 @@ def create_admin():
                 hashed_password=hashed_password,
                 is_active=True,
                 is_admin=True,
-                phone_number="0000000000"
+                # Phone is optional and validated as Egyptian format in API responses.
+                phone_number=None
             )
             db.add(admin_user)
             db.commit()
