@@ -45,12 +45,20 @@ create_default_admin()
 
 app = FastAPI(title="ELWAKEL-SPORT Booking System")
 
+import os
+
 # CORS Configuration
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://192.168.100.77:3000",
 ]
+
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    ALLOWED_ORIGINS.append(frontend_url)
+    if frontend_url.endswith("/"):
+        ALLOWED_ORIGINS.append(frontend_url[:-1])
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,7 +70,7 @@ app.add_middleware(
 )
 
 # Session Middleware for OAuth
-app.add_middleware(SessionMiddleware, secret_key="some-very-secret-key-for-oauth")
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "some-very-secret-key-for-oauth"))
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
