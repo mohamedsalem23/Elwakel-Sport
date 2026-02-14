@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .. import crud, models, schemas, auth, database
+import crud, models, schemas, auth, database
 
 router = APIRouter(
     prefix="/admin",
